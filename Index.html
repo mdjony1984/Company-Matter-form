@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case Management</title>
+<style>
+    body { font-family: "Times New Roman", serif; margin: 20px; }
+    h1 { text-align: center; font-size: 20pt; margin-bottom: 20px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select { width: 100%; padding: 5px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 8px 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table, th, td { border: 1px solid black; }
+    th, td { padding: 8px; text-align: left; }
+    .print-header { display: none; }
+    @media print {
+        .no-print { display: none; }
+        .print-header { display: block; text-align: center; font-size: 16pt; margin-bottom: 20px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="print-header">
+    Supreme Court of Bangladesh<br>
+    High Court Division, Dhaka<br>
+    (Original Section)
+</div>
+
+<h1 class="no-print">Supreme Court of Bangladesh, High Court Division, Dhaka (Original Section)</h1>
+
+<div class="no-print">
+    <label>Case Type</label>
+    <input type="text" id="caseType">
+
+    <label>Case Number</label>
+    <input type="text" id="caseNumber">
+
+    <label>Year</label>
+    <input type="text" id="year">
+
+    <label>Sent Court & Date</label>
+    <input type="text" id="sentCourtDate">
+
+    <label>Received Court & Date</label>
+    <input type="text" id="receivedCourtDate">
+
+    <label>Typist Name & Date</label>
+    <input type="text" id="typistDate">
+
+    <label>A.R Sign & Date</label>
+    <input type="text" id="arSignDate">
+
+    <label>Dispatch & Date</label>
+    <input type="text" id="dispatchDate">
+
+    <label>R.A & Date</label>
+    <input type="text" id="raDate">
+
+    <button onclick="saveCase()">Save Case</button>
+    <button onclick="print()">Print</button>
+</div>
+
+<h2 class="no-print">Saved Cases</h2>
+<table id="caseTable">
+    <thead>
+        <tr>
+            <th>Case Type</th>
+            <th>Case Number</th>
+            <th>Year</th>
+            <th>Sent Court & Date</th>
+            <th>Received Court & Date</th>
+            <th>Typist Name & Date</th>
+            <th>A.R Sign & Date</th>
+            <th>Dispatch & Date</th>
+            <th>R.A & Date</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function loadCases() {
+        let cases = JSON.parse(localStorage.getItem("cases") || "[]");
+        let tbody = document.querySelector("#caseTable tbody");
+        tbody.innerHTML = "";
+        cases.forEach(c => {
+            let row = `<tr>
+                <td>${c.caseType}</td>
+                <td>${c.caseNumber}</td>
+                <td>${c.year}</td>
+                <td>${c.sentCourtDate}</td>
+                <td>${c.receivedCourtDate}</td>
+                <td>${c.typistDate}</td>
+                <td>${c.arSignDate}</td>
+                <td>${c.dispatchDate}</td>
+                <td>${c.raDate}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+
+    function saveCase() {
+        let caseType = document.getElementById("caseType").value;
+        let caseNumber = document.getElementById("caseNumber").value;
+        let year = document.getElementById("year").value;
+        let sentCourtDate = document.getElementById("sentCourtDate").value;
+        let receivedCourtDate = document.getElementById("receivedCourtDate").value;
+        let typistDate = document.getElementById("typistDate").value;
+        let arSignDate = document.getElementById("arSignDate").value;
+        let dispatchDate = document.getElementById("dispatchDate").value;
+        let raDate = document.getElementById("raDate").value;
+
+        let cases = JSON.parse(localStorage.getItem("cases") || "[]");
+        cases.push({ caseType, caseNumber, year, sentCourtDate, receivedCourtDate, typistDate, arSignDate, dispatchDate, raDate });
+        localStorage.setItem("cases", JSON.stringify(cases));
+        loadCases();
+        alert("Case saved successfully!");
+    }
+
+    loadCases();
+</script>
+
+</body>
+</html>
